@@ -38,9 +38,30 @@ router.get("/:email", (req, res) => {
 });
 
 // POST request: Add a new friend
-router.post("/", (req, res) => {
-    // Update the code here
-    res.send("Yet to be implemented"); // This line is to be replaced with actual return value
+router.post("/", function (req, res) {
+    const email = req.body.email;
+    const firstName = req.body.firstName;
+    const lastName = req.body.lastName;
+    const DOB = req.body.DOB;
+
+    if (!email) {
+        res.status(400).json("Email is required");
+    }
+
+    try {
+        if (email in friends) {
+            res.status(400).json("Friend already exists");
+        }
+
+        friends[email] = {
+            firstName: firstName,
+            lastName: lastName,
+            DOB: DOB,
+        };
+        res.json(`The user ${firstName} has been added!`);
+    } catch (error) {
+        res.status(400).json("Error adding friend");
+    }
 });
 
 // PUT request: Update the details of a friend with email id
