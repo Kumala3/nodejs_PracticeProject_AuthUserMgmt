@@ -33,7 +33,7 @@ router.get("/:email", (req, res) => {
     if (user) {
         res.json(user);
     } else {
-        res.status(404).json(`Friend with email: ${email} not found`);
+        res.status(404).js(`Friend with email: ${email} not found`);
     }
 });
 
@@ -70,7 +70,7 @@ router.put("/:email", function (req, res) {
     let friend = friends[email];
 
     if (!friend) {
-        res.json(`Friend with email: ${email} not found`);
+        res.status(404).json(`Friend with email: ${email} not found`);
     }
 
     try {
@@ -84,7 +84,7 @@ router.put("/:email", function (req, res) {
         friends[email] = friend;
         res.json(`Friend with the email: ${email} updated.`);
     } catch (err) {
-        res.status(400).json("Error updating friend");
+        res.status(500).json("Error updating friend");
     }
 });
 
