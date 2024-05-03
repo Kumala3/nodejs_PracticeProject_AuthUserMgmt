@@ -33,7 +33,7 @@ router.get("/:email", (req, res) => {
     if (user) {
         res.json(user);
     } else {
-        res.status(404).send(`Friend with email: ${email} not found`);
+        res.status(404).json(`Friend with email: ${email} not found`);
     }
 });
 
@@ -66,7 +66,7 @@ router.post("/", function (req, res) {
 
 // PUT request: Update the details of a friend with email id
 router.put("/:email", function (req, res) {
-    const email = req.params.email;
+    const email = req.params.email.toLowerCase();
     let friend = friends[email];
 
     if (!friend) {
@@ -74,25 +74,15 @@ router.put("/:email", function (req, res) {
     }
 
     try {
-        let DOB = req.body.DOB;
-        let firstName = req.body.firstName;
-        let lastName = req.body.lastName;
-
-        // Update the old DOB with the new DOB if it was given
-        if (DOB) {
-            friend["DOB"] = DOB;
-        }
-
-        if (firstName) {
-            friend["firstName"] = firstName;
-        }
-
-        if (lastName) {
-            friend["lastName"] = lastName;
+        for (let key in req.body) {
+            if (friend.hasOwnProperty(key) && req.body[key]) {
+                // Check if the key is valid and new value is provided
+                friend[key] = req.body[key];
+            }
         }
 
         friends[email] = friend;
-        res.send(`Friend with the email: ${email} updated.`);
+        res.json(`Friend with the email: ${email} updated.`);
     } catch (err) {
         res.status(400).json("Error updating friend");
     }
@@ -101,7 +91,7 @@ router.put("/:email", function (req, res) {
 // DELETE request: Delete a friend by email id
 router.delete("/:email", (req, res) => {
     // Update the code here
-    res.send("Yet to be implemented"); // This line is to be replaced with actual return value
+    res.json("Yet to be implemented"); // This line is to be replaced with actual return value
 });
 
 module.exports = router;
