@@ -6,10 +6,10 @@ const routes = require("./router/friends.js");
 let users = [];
 
 const doesExist = username => {
-    let userswithsamename = users.filter(user => {
+    let users_with_same_name = users.filter(user => {
         return user.username === username;
     });
-    if (userswithsamename.length > 0) {
+    if (users_with_same_name.length > 0) {
         return true;
     } else {
         return false;
@@ -17,10 +17,10 @@ const doesExist = username => {
 };
 
 const authenticatedUser = (username, password) => {
-    let validusers = users.filter(user => {
+    let valid_users = users.filter(user => {
         return user.username === username && user.password === password;
     });
-    if (validusers.length > 0) {
+    if (valid_users.length > 0) {
         return true;
     } else {
         return false;
@@ -42,6 +42,7 @@ app.use(express.json());
 app.use("/friends", function auth(req, res, next) {
     if (req.session.authorization) {
         token = req.session.authorization["accessToken"];
+
         jwt.verify(token, "access", (err, user) => {
             if (!err) {
                 req.user = user;
@@ -96,7 +97,7 @@ app.post("/register", (req, res) => {
             return res
                 .status(200)
                 .json({
-                    message: "User successfully registred. Now you can login",
+                    message: "User successfully registered. Now you can login",
                 });
         } else {
             return res.status(404).json({ message: "User already exists!" });
