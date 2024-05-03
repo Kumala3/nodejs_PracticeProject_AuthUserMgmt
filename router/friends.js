@@ -33,7 +33,7 @@ router.get("/:email", (req, res) => {
     if (user) {
         res.json(user);
     } else {
-        res.status(404).js(`Friend with email: ${email} not found`);
+        res.status(404).json(`Friend with email: ${email} not found`);
     }
 });
 
@@ -90,8 +90,19 @@ router.put("/:email", function (req, res) {
 
 // DELETE request: Delete a friend by email id
 router.delete("/:email", (req, res) => {
-    // Update the code here
-    res.json("Yet to be implemented"); // This line is to be replaced with actual return value
+    const email = req.params.email.toLowerCase();
+    const friend = friends[email];
+
+    if (!friend) {
+        res.status(404).json(`Friend with email: ${email} not found`);
+    }
+
+    try {
+        delete friends[email];
+        res.json(`Friend with email: ${email} has been successfully deleted`);
+    } catch (err) {
+        res.status(500).json(`Error deleting friend with email: ${email}`);
+    }
 });
 
 module.exports = router;
